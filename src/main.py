@@ -19,6 +19,17 @@ def initialize() -> None:
     global API_KEY
     API_KEY = os.environ.get('API_KEY')
 
+def generate_label_config(task: str, classes: List[str]) -> str:
+    # detection
+    if task == 'detection':
+        pass
+    
+    # classification
+    elif task == 'classification':
+        pass
+
+    pass
+
 
 '''
 - create project
@@ -32,3 +43,35 @@ if __name__ == "__main__":
     # Connect to the Label Studio API and check the connection
     client = Client(url=LABEL_STUDIO_URL, api_key=API_KEY)
     print(client.check_connection())
+
+    # get projects
+    projects = client.get_projects()
+    print(projects)
+
+    # create project
+    title: str = "Test Project"
+    description: str = "test project for label-studio adaptor task"
+    # label_config: str = generate_label_config() # TODO:
+    project = client.start_project(
+        title=title,
+        description=description
+    )
+    print(f"new project={project}")
+
+    tasks = project.get_tasks()
+    print(f"tasks=[size={len(tasks)} tasks={tasks}]")
+
+    tasks = project.get_labeled_tasks()
+    print(f"tasks=[size={len(tasks)} tasks={tasks}]")
+
+    # image = open(IMAGE_FILE, 'rb')
+    # print(image.name)
+
+    # tasks = {}
+    # project.import_tasks(
+    #     tasks=tasks,
+    #     preannotated_from_fields=None
+    # )
+
+    # response = client.delete_project(project_id=project.id)
+    # print(response)
