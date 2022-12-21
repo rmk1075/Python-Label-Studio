@@ -1,7 +1,11 @@
 from dotenv import load_dotenv
 from label_studio_sdk import Client
+from label_studio_sdk.project import Project
 import os
 from typing import List
+from uuid import uuid4
+
+from label_studio.label_studio import Task, generate_label_config
 
 # Define the URL where Label Studio is accessible and the API key for your user account
 LABEL_STUDIO_URL = ''
@@ -19,18 +23,6 @@ def initialize() -> None:
     global API_KEY
     API_KEY = os.environ.get('API_KEY')
 
-def generate_label_config(task: str, classes: List[str]) -> str:
-    # detection
-    if task == 'detection':
-        pass
-    
-    # classification
-    elif task == 'classification':
-        pass
-
-    pass
-
-
 '''
 - create project
 - delete project
@@ -45,33 +37,36 @@ if __name__ == "__main__":
     print(client.check_connection())
 
     # get projects
-    projects = client.get_projects()
+    projects: List[Project] = client.get_projects()
     print(projects)
 
-    # create project
-    title: str = "Test Project"
-    description: str = "test project for label-studio adaptor task"
-    # label_config: str = generate_label_config() # TODO:
-    project = client.start_project(
-        title=title,
-        description=description
-    )
-    print(f"new project={project}")
+    # find project
+    title: str = "LS Test Project"
+    project: Project = None
+    for proj in projects:
+        if proj.get_params()['title'] == title:
+            project = proj
+            break
 
-    tasks = project.get_tasks()
-    print(f"tasks=[size={len(tasks)} tasks={tasks}]")
+    config = {
+        'task': Task.DETECTION,
+        'classes': ['person', 'flame']
+    }
 
-    tasks = project.get_labeled_tasks()
-    print(f"tasks=[size={len(tasks)} tasks={tasks}]")
+    if project is None:
+        # create project
+        description: str = "test project for label-studio adaptor task"
+        label_config: str = generate_label_config(
+            task=config['task'],
+            classes=config['classes']
+        )
+        project = client.start_project(
+            title=title,
+            description=description,
+            label_config=label_config
+        )
 
-    # image = open(IMAGE_FILE, 'rb')
-    # print(image.name)
+    print(f"project={project}")
 
-    # tasks = {}
-    # project.import_tasks(
-    #     tasks=tasks,
-    #     preannotated_from_fields=None
-    # )
 
-    # response = client.delete_project(project_id=project.id)
-    # print(response)
+
