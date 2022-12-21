@@ -11,8 +11,8 @@ from label_studio.label_studio import Task, generate_label_config
 LABEL_STUDIO_URL = ''
 API_KEY = ''
 
-IMAGE_FILE = './resource/images/test.jpg'
 ENV_FILE = './resource/.env'
+IMAGE_URI = ''
 
 def initialize() -> None:
     load_dotenv(dotenv_path=ENV_FILE)
@@ -22,6 +22,9 @@ def initialize() -> None:
 
     global API_KEY
     API_KEY = os.environ.get('API_KEY')
+
+    global IMAGE_URI
+    IMAGE_URI = os.environ.get('IMAGE_URI')
 
 '''
 - create project
@@ -69,4 +72,24 @@ if __name__ == "__main__":
     print(f"project={project}")
 
 
+    # generate tasks
+    image = IMAGE_URI
+    id = str(uuid4())
+    tasks = {
+        'data': {
+            'image': image,
+        },
+        'meta': {
+            'id': id
+        }
+    }
+    
+    task_id = project.import_tasks(
+        tasks=tasks
+    )
 
+    tasks = project.get_tasks()
+    print(f"tasks=[size={len(tasks)} tasks={tasks}]")
+
+    task = project.get_task(task_id=task_id[0])
+    print(f"task=[{task}]")
