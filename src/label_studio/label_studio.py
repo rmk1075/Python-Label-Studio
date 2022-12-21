@@ -68,3 +68,64 @@ def generate_label_config(task: Literal, classes: List[str]) -> str:
     view += '</View>'
 
     return view
+
+def generate_annotations() -> List[dict]:
+    '''
+    "annotations": [
+        {
+            "id": "1001",
+            "result": [
+                {
+                    "from_name": "tag",
+                    "id": "Dx_aB91ISN",
+                    "source": "$image",
+                    "to_name": "img",
+                    "type": "rectanglelabels",
+                    "value": {
+                        "height": 10.458911419423693,
+                        "rectanglelabels": [
+                            "Moonwalker"
+                        ],
+                        "rotation": 0,
+                        "width": 12.4,
+                        "x": 50.8,
+                        "y": 5.869797225186766
+                    }
+                }
+            ],
+            "was_cancelled":false,
+            "ground_truth":false,
+            "created_at":"2021-03-09T22:16:08.728353Z",
+            "updated_at":"2021-03-09T22:16:08.728378Z",
+            "lead_time":4.288,
+            "result_count":0,
+            "task":1,
+            "completed_by":10
+        }
+    ]
+    '''
+    annotations = [
+        {
+            "result": [
+                {
+                    "to_name": "image",
+                    "from_name": "label",
+                    "original_width": 1920,
+                    "original_height": 1080,
+                    "image_rotation": 0,
+                    "value": {
+                        "x": 18.548387096774192,
+                        "y": 20.43010752688172,
+                        "width": 20.967741935483872,
+                        "height": 34.40860215053764,
+                        "rotation": 0,
+                        "rectanglelabels": [
+                            "Airplane"
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+
+    return annotations

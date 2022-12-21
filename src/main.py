@@ -5,7 +5,7 @@ import os
 from typing import List
 from uuid import uuid4
 
-from label_studio.label_studio import Task, generate_label_config
+from label_studio.label_studio import Task, generate_label_config, generate_annotations
 
 # Define the URL where Label Studio is accessible and the API key for your user account
 LABEL_STUDIO_URL = ''
@@ -71,14 +71,37 @@ if __name__ == "__main__":
 
     print(f"project={project}")
 
+    # # import task without annotation
+    # # generate tasks
+    # image = IMAGE_URI
+    # id = str(uuid4())
+    # tasks = {
+    #     'data': {
+    #         'image': image,
+    #     },
+    #     'meta': {
+    #         'id': id
+    #     }
+    # }
+    
+    # task_id = project.import_tasks(
+    #     tasks=tasks
+    # )
 
+    # task = project.get_task(task_id=task_id[0])
+    # print(f"task=[{task}]")
+
+    # import task with annotation
     # generate tasks
     image = IMAGE_URI
     id = str(uuid4())
+    annotations = generate_annotations()
+
     tasks = {
         'data': {
             'image': image,
         },
+        'annotations': annotations,
         'meta': {
             'id': id
         }
@@ -87,9 +110,6 @@ if __name__ == "__main__":
     task_id = project.import_tasks(
         tasks=tasks
     )
-
-    tasks = project.get_tasks()
-    print(f"tasks=[size={len(tasks)} tasks={tasks}]")
-
+    
     task = project.get_task(task_id=task_id[0])
     print(f"task=[{task}]")
