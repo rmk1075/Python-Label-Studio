@@ -34,12 +34,12 @@ def generate_label_config(task: Literal, classes: List[str]) -> str:
         for name in classes:
             labels.append(f'<Label value="{name}" background="{_str2color(name=name)}"/>')
         
-        choices = f'<RectangleLabels name="label" toName="image">'
+        rectanglelabels = f'<RectangleLabels name="label" toName="image">'
         for label in labels:
             choices += label
-        choices += '</RectangleLabels>'
+        rectanglelabels += '</RectangleLabels>'
 
-        context = f'<Image name="image" value="$image"/>{choices}'
+        context = f'<Image name="image" value="$image"/>{rectanglelabels}'
     # classification
     elif task == Task.CLASSIFICATION:
         '''
@@ -70,66 +70,91 @@ def generate_label_config(task: Literal, classes: List[str]) -> str:
 
     return view
 
-def generate_annotations() -> List[dict]:
-    '''
-    "annotations": [
-        {
-            "id": "1001",
-            "result": [
-                {
-                    "from_name": "tag",
-                    "id": "Dx_aB91ISN",
-                    "source": "$image",
-                    "to_name": "img",
-                    "type": "rectanglelabels",
-                    "value": {
-                        "height": 10.458911419423693,
-                        "rectanglelabels": [
-                            "Moonwalker"
-                        ],
-                        "rotation": 0,
-                        "width": 12.4,
-                        "x": 50.8,
-                        "y": 5.869797225186766
+def generate_annotations(task: Literal, image: dict, infos: List[dict]) -> List[dict]:
+    annotations = []
+    
+    if task == Task.DETECTION:
+        '''
+        "annotations": [
+            {
+                "id": "1001",
+                "result": [
+                    {
+                        "from_name": "tag",
+                        "id": "Dx_aB91ISN",
+                        "source": "$image",
+                        "to_name": "img",
+                        "type": "rectanglelabels",
+                        "value": {
+                            "height": 10.458911419423693,
+                            "rectanglelabels": [
+                                "Moonwalker"
+                            ],
+                            "rotation": 0,
+                            "width": 12.4,
+                            "x": 50.8,
+                            "y": 5.869797225186766
+                        }
                     }
+                ],
+                "was_cancelled":false,
+                "ground_truth":false,
+                "created_at":"2021-03-09T22:16:08.728353Z",
+                "updated_at":"2021-03-09T22:16:08.728378Z",
+                "lead_time":4.288,
+                "result_count":0,
+                "task":1,
+                "completed_by":10
+            }
+        ]
+        '''
+        for info in infos:
+            annotation = {
+                "id": info["id"],
+                "type":"rectanglelabels",
+                "to_name": "image",
+                "from_name": "label",
+                "original_width": image["width"],
+                "original_height": image["height"],
+                "image_rotation": image["rotation"],
+                "value": {
+                    "x": info["x"],
+                    "y": info["y"],
+                    "width": info["width"],
+                    "height": info["height"],
+                    "rotation": info["rotation"],
+                    "rectanglelabels": info["classes"] # List
                 }
-            ],
-            "was_cancelled":false,
-            "ground_truth":false,
-            "created_at":"2021-03-09T22:16:08.728353Z",
-            "updated_at":"2021-03-09T22:16:08.728378Z",
-            "lead_time":4.288,
-            "result_count":0,
-            "task":1,
-            "completed_by":10
-        }
-    ]
-    '''
-    id = str(uuid4())
-    annotations = [
-        {
-            "result": [
-                {
-                    "id": id,
-                    "type":"rectanglelabels",
-                    "to_name": "image",
-                    "from_name": "label",
-                    "original_width": 1920,
-                    "original_height": 1080,
-                    "image_rotation": 0,
-                    "value": {
-                        "x": 18.548387096774192,
-                        "y": 20.43010752688172,
-                        "width": 20.967741935483872,
-                        "height": 34.40860215053764,
-                        "rotation": 0,
-                        "rectanglelabels": [
-                            "person"
-                        ]
-                    }
-                }
-            ]
-        }
-    ]
+            }
+        # id = str(uuid4())
+        # annotations = [
+        #     {
+        #         "result": [
+        #             {
+        #                 "id": id,
+        #                 "type":"rectanglelabels",
+        #                 "to_name": "image",
+        #                 "from_name": "label",
+        #                 "original_width": 1920,
+        #                 "original_height": 1080,
+        #                 "image_rotation": 0,
+        #                 "value": {
+        #                     "x": 18.548387096774192,
+        #                     "y": 20.43010752688172,
+        #                     "width": 20.967741935483872,
+        #                     "height": 34.40860215053764,
+        #                     "rotation": 0,
+        #                     "rectanglelabels": [
+        #                         "person"
+        #                     ]
+        #                 }
+        #             }
+        #         ]
+        #     }
+        # ]
+    elif task == Task.CLASSIFICATION:
+        raise NotImplementedError()
+    else:
+        raise NotImplementedError(f"[{task}] is not supported task.")
 
     return annotations

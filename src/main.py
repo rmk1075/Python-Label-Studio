@@ -71,45 +71,47 @@ if __name__ == "__main__":
 
     print(f"project={project}")
 
-    # # import task without annotation
-    # # generate tasks
-    # image = IMAGE_URI
-    # id = str(uuid4())
-    # tasks = {
-    #     'data': {
-    #         'image': image,
-    #     },
-    #     'meta': {
-    #         'id': id
-    #     }
-    # }
-    
-    # task_id = project.import_tasks(
-    #     tasks=tasks
-    # )
-
-    # task = project.get_task(task_id=task_id[0])
-    # print(f"task=[{task}]")
-
-    # import task with annotation
+    # import task
     # generate tasks
-    image = IMAGE_URI
-    id = str(uuid4())
-    annotations = generate_annotations()
+    image_info = {
+        "width": 1920,
+        "height": 1080,
+        "rotation": 0
+    }
+    
+    infos = [
+        {
+            "id": str(uuid4()),
+            "x": 18.548387096774192,
+            "y": 20.43010752688172,
+            "width": 20.967741935483872,
+            "height": 34.40860215053764,
+            "rotation": 0,
+            "classes": ["person"]
+        }
+    ]
+    
+    annotations = generate_annotations(
+        task=Task.DETECTION,
+        image=image_info,
+        infos=infos
+    )
 
+    # generate task
+    task_id = str(uuid4())
+    image = IMAGE_URI
     tasks = {
         'data': {
             'image': image,
         },
         'annotations': annotations,
         'meta': {
-            'id': id
+            'id': task_id
         }
     }
     
-    task_id = project.import_tasks(
-        tasks=tasks
-    )
+    # import task
+    task_id = project.import_tasks(tasks=tasks)
     
     task = project.get_task(task_id=task_id[0])
     print(f"task=[{task}]")
