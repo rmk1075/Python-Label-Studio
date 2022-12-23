@@ -14,6 +14,9 @@ API_KEY = ''
 ENV_FILE = './resource/.env'
 IMAGE_URI = ''
 
+# TASK = Task.DETECTION
+TASK = Task.CLASSIFICATION
+
 def initialize() -> None:
     load_dotenv(dotenv_path=ENV_FILE)
 
@@ -44,7 +47,7 @@ if __name__ == "__main__":
     print(projects)
 
     # find project
-    title: str = "LS Test Project"
+    title: str = f"LS Test Project-{TASK}"
     project: Project = None
     for proj in projects:
         if proj.get_params()['title'] == title:
@@ -52,7 +55,7 @@ if __name__ == "__main__":
             break
 
     config = {
-        'task': Task.DETECTION,
+        'task': TASK,
         'classes': ['person', 'flame']
     }
 
@@ -79,8 +82,8 @@ if __name__ == "__main__":
         "rotation": 0
     }
     
-    infos = [
-        {
+    infos = {
+        Task.DETECTION.value: {
             "id": str(uuid4()),
             "x": 18.548387096774192,
             "y": 20.43010752688172,
@@ -88,13 +91,17 @@ if __name__ == "__main__":
             "height": 34.40860215053764,
             "rotation": 0,
             "classes": ["person"]
+        },
+        Task.CLASSIFICATION.value: {
+            "id": str(uuid4()),
+            "classes": ["person"]
         }
-    ]
+    }
     
     annotations = generate_annotations(
-        task=Task.DETECTION,
+        task=TASK,
         image=image_info,
-        infos=infos
+        infos=infos[TASK.value]
     )
 
     # generate task
