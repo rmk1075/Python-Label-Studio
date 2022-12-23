@@ -1,5 +1,6 @@
 from enum import Enum
 from typing import List, Literal
+from uuid import uuid4
 
 class Task(Enum):
     DETECTION = 'detection'
@@ -104,10 +105,13 @@ def generate_annotations() -> List[dict]:
         }
     ]
     '''
+    id = str(uuid4())
     annotations = [
         {
             "result": [
                 {
+                    "id": id,
+                    "type":"rectanglelabels",
                     "to_name": "image",
                     "from_name": "label",
                     "original_width": 1920,
@@ -120,7 +124,7 @@ def generate_annotations() -> List[dict]:
                         "height": 34.40860215053764,
                         "rotation": 0,
                         "rectanglelabels": [
-                            "Airplane"
+                            "person"
                         ]
                     }
                 }
