@@ -128,7 +128,7 @@ def generate_annotations(task: Literal, image: dict, infos: List[dict]) -> List[
                 }
             }
             result.append(annotation)
-        annotations.append(result)
+        annotations.append({"result": result})
         # id = str(uuid4())
         # annotations = [
         #     {
