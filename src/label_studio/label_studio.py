@@ -129,34 +129,43 @@ def generate_annotations(task: Literal, image: dict, infos: List[dict]) -> List[
             }
             result.append(annotation)
         annotations.append({"result": result})
-        # id = str(uuid4())
-        # annotations = [
-        #     {
-        #         "result": [
-        #             {
-        #                 "id": id,
-        #                 "type":"rectanglelabels",
-        #                 "to_name": "image",
-        #                 "from_name": "label",
-        #                 "original_width": 1920,
-        #                 "original_height": 1080,
-        #                 "image_rotation": 0,
-        #                 "value": {
-        #                     "x": 18.548387096774192,
-        #                     "y": 20.43010752688172,
-        #                     "width": 20.967741935483872,
-        #                     "height": 34.40860215053764,
-        #                     "rotation": 0,
-        #                     "rectanglelabels": [
-        #                         "person"
-        #                     ]
-        #                 }
-        #             }
-        #         ]
-        #     }
-        # ]
     elif task == Task.CLASSIFICATION:
-        raise NotImplementedError()
+        '''
+        "annotations": [
+            {
+                "id": "1001",
+                "result": [
+                    {
+                        "id": "result3",
+                        "type": "choices",
+                        "from_name": "choice",
+                        "to_name": "image",
+                        "value": {
+                        "choices": ["Airbus"]
+                    }
+                ],
+                "was_cancelled":false,
+                "ground_truth":false,
+                "created_at":"2021-03-09T22:16:08.728353Z",
+                "updated_at":"2021-03-09T22:16:08.728378Z",
+                "lead_time":4.288,
+                "result_count":0,
+                "task":1,
+                "completed_by":10
+            }
+        ]
+        '''
+        result = []
+        for info in infos:
+            annotation = {
+                "id": info["id"],
+                "type": "choices",
+                "from_name": "choice",
+                "to_name": "image",
+                "value": {info["classes"]}
+            }
+            result.append(annotation)
+        annotations.append({"result": result})
     else:
         raise NotImplementedError(f"[{task}] is not supported task.")
 
