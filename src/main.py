@@ -83,19 +83,23 @@ if __name__ == "__main__":
     }
     
     infos = {
-        Task.DETECTION.value: {
-            "id": str(uuid4()),
-            "x": 18.548387096774192,
-            "y": 20.43010752688172,
-            "width": 20.967741935483872,
-            "height": 34.40860215053764,
-            "rotation": 0,
-            "classes": ["person"]
-        },
-        Task.CLASSIFICATION.value: {
-            "id": str(uuid4()),
-            "classes": ["person"]
-        }
+        Task.DETECTION.value: [
+            {
+                "id": str(uuid4()),
+                "x": 18.548387096774192,
+                "y": 20.43010752688172,
+                "width": 20.967741935483872,
+                "height": 34.40860215053764,
+                "rotation": 0,
+                "classes": ["person"]
+            }
+        ],
+        Task.CLASSIFICATION.value: [
+            {
+                "id": str(uuid4()),
+                "classes": ["person"]
+            }
+        ]
     }
     
     annotations = generate_annotations(

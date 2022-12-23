@@ -56,7 +56,7 @@ def generate_label_config(task: Literal, classes: List[str]) -> str:
         for name in classes:
             labels.append(f'<Choice value="{name}"/>')
         
-        choices = f'<Choices name="label" toName="image">'
+        choices = f'<Choices name="choice" toName="image">'
         for label in labels:
             choices += label
         choices += '</Choices>'
@@ -162,7 +162,9 @@ def generate_annotations(task: Literal, image: dict, infos: List[dict]) -> List[
                 "type": "choices",
                 "from_name": "choice",
                 "to_name": "image",
-                "value": {info["classes"]}
+                "value": {
+                    "choices": info["classes"]
+                }
             }
             result.append(annotation)
         annotations.append({"result": result})
