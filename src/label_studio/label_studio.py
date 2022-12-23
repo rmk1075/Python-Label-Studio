@@ -108,6 +108,7 @@ def generate_annotations(task: Literal, image: dict, infos: List[dict]) -> List[
             }
         ]
         '''
+        result = []
         for info in infos:
             annotation = {
                 "id": info["id"],
@@ -126,6 +127,8 @@ def generate_annotations(task: Literal, image: dict, infos: List[dict]) -> List[
                     "rectanglelabels": info["classes"] # List
                 }
             }
+            result.append(annotation)
+        annotations.append(result)
         # id = str(uuid4())
         # annotations = [
         #     {
