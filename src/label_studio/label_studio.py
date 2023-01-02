@@ -36,7 +36,7 @@ def generate_label_config(task: Literal, classes: List[str]) -> str:
         
         rectanglelabels = f'<RectangleLabels name="label" toName="image">'
         for label in labels:
-            choices += label
+            rectanglelabels += label
         rectanglelabels += '</RectangleLabels>'
 
         context = f'<Image name="image" value="$image"/>{rectanglelabels}'
