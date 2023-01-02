@@ -18,7 +18,7 @@ class LabelConfigBuilder:
         self._labels: List[self.Label] = []
     
     @classmethod
-    def task(cls, task: Task) -> LabelConfigBuilderType:
+    def reset(cls, task: Task) -> LabelConfigBuilderType:
         builder = cls(task=task)
         return builder
     
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     task = Task.DETECTION
     classes = ['a', 'b', 'c', 'd']
     
-    config = LabelConfigBuilder.task(task=task)
+    config = LabelConfigBuilder.reset(task=task)
     for clazz in classes:
         config = config.add_label(label=clazz)
     result = config.build()
