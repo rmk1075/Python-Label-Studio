@@ -23,17 +23,14 @@ class LabelConfigBuilder:
         return builder
     
     def add_label(self, label: str) -> LabelConfigBuilderType:
-        if self._task == Task.DETECTION:
-            self._labels.append(self.L(value=label, background=str2color(name=label)))
-        elif self._task == Task.CLASSIFICATION:
-            self._labels.append(self.C(value=label))
+        self._labels.append(label)
         return self
     
     def build(self) -> str:
         result = ''
         if self._task == Task.DETECTION:
             for label in self._labels:
-                result += f'<Label value="{label.value}" background="{label.background}"/>'
+                result += f'<Label value="{label}" background="{str2color(label)}"/>'
             result = '<RectangleLabels name="label" toName="image">' + result + '</RectangleLabels>'
         elif self._task == Task.CLASSIFICATION:
             for label in self._labels:
@@ -44,18 +41,6 @@ class LabelConfigBuilder:
                 raise SyntaxError("task is not defined.")
             raise ValueError(f"task {self._task} is not supported.")
         return '<View><Image name="image" value="$image"/>' + result + '</View>'
-    
-    class Label:
-        pass
-    
-    class L(Label):
-        def __init__(self, value: str, background: str) -> None:
-            self.value = value
-            self.background = background
-            
-    class C(Label):
-        def __init__(self, value: str) -> None:
-            self.value = value
                 
                 
 if __name__ == "__main__":
